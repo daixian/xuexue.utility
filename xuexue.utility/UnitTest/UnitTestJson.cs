@@ -5,6 +5,7 @@ using xuexue.LitJson;
 using System.Text;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace UnitTest
 {
@@ -49,6 +50,9 @@ namespace UnitTest
         public List<GameObject> goList;
 
         public GameObject[] goArr;
+
+        [xuexueJson]
+        public DateTime dt;
     }
 
     public class TestLitJson3IM 
@@ -146,8 +150,6 @@ namespace UnitTest
         //}
 
 
-
-
         [TestMethod]
         public void TestMethod_UnityTest()
         {
@@ -158,7 +160,7 @@ namespace UnitTest
             string str4 = JsonMapper.ToJson(tlj4);
 
             float t1b = 2;
-            TestLitJson3 t1 = new TestLitJson3() { a = 1, b = t1b, c = 3 };
+            TestLitJson3 t1 = new TestLitJson3() { a = 1, b = t1b, c = 3, dt = DateTime.Now };
             TestLitJson3 t2 = new TestLitJson3() { a = 5, b = 6, c = 7 };
 
             string str = JsonMapper.ToJson(t1);
@@ -167,6 +169,7 @@ namespace UnitTest
             Assert.IsTrue(t2.a == t1.a);
             Assert.IsTrue(t2.b == t1.b);
             Assert.IsTrue(t2.c == 7);
+            Assert.IsTrue(t2.dt.ToShortDateString() == t1.dt.ToShortDateString());
 
             Vector3 v3 = new Vector3(1, 2, 3);
             Vector3 v31 = new Vector3(2, 2, 2);      
@@ -176,6 +179,19 @@ namespace UnitTest
             Assert.IsTrue(v3.z == v3_2.z);
 
             //string str = JsonMapper.ToJson(v3);
+        }
+
+        [TestMethod]
+        public void TestMethod_Test2()
+        {
+            //var str1 = JsonMapper.ToJson(1);
+
+            //System.DateTime dt = System.DateTime.Now;
+
+            //string strdt = Convert.ToString((DateTime)dt);
+            //string str = JsonMapper.ToJson(strdt);
+            //System.DateTime obj = JsonMapper.ToObject<System.DateTime>(str);
+       
         }
     }
 }
