@@ -76,6 +76,10 @@ namespace xuexue.LitJson
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class xuexueJson : Attribute
     {
+        /// <summary>
+        /// 这个成员的优先级，默认是0，优先级越小越靠前。
+        /// </summary>
+        public int priority = 0;
     }
 
     /// <summary>

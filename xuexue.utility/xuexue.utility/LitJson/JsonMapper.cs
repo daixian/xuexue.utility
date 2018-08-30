@@ -24,6 +24,7 @@ namespace xuexue.LitJson
         public MemberInfo Info;
         public bool       IsField;
         public Type       Type;
+        public int        Priority;
     }
 
 
@@ -280,7 +281,7 @@ namespace xuexue.LitJson
                 xxjc = JsonTypeRegister.defaultClassAttribute;//使用一个当前的默认设置
             }
 
-            IList<PropertyMetadata> props = new List<PropertyMetadata>();
+            List<PropertyMetadata> props = new List<PropertyMetadata>();
 
 
             foreach (PropertyInfo p_info in type.GetProperties(xxjc.propertyflags))
@@ -294,6 +295,7 @@ namespace xuexue.LitJson
                     continue;
                 }
 
+                //对System.Collections.Generic中的数据结构进行忽略判断
                 if (p_info.PropertyType.IsGenericType)  {
                     bool isIgnore = false;
                     Type[] gat = p_info.PropertyType.GetGenericArguments();
@@ -308,11 +310,13 @@ namespace xuexue.LitJson
                     }
                 }
 
+                //如果存在特别要使能的成员名List
                 if (xxjc.enableMembers != null && xxjc.enableMembers.Contains(p_info.Name))
                 {
                     PropertyMetadata p_data = new PropertyMetadata();
                     p_data.Info = p_info;
                     p_data.IsField = false;
+                    p_data.Priority = 0;
                     props.Add(p_data);
 
                     continue;
@@ -328,6 +332,7 @@ namespace xuexue.LitJson
                     PropertyMetadata p_data = new PropertyMetadata();
                     p_data.Info = p_info;
                     p_data.IsField = false;
+                    p_data.Priority = p_info.GetCustomAttribute<xuexueJson>().priority;
                     props.Add(p_data);
                     continue;
                 }
@@ -340,6 +345,7 @@ namespace xuexue.LitJson
                     PropertyMetadata p_data = new PropertyMetadata();
                     p_data.Info = p_info;
                     p_data.IsField = false;
+                    p_data.Priority = 0;
                     props.Add(p_data);
                 }
             }
@@ -353,6 +359,8 @@ namespace xuexue.LitJson
                 {
                     continue;
                 }
+
+                //对System.Collections.Generic中的数据结构进行忽略判断
                 if (f_info.FieldType.IsGenericType) {
                     bool isIgnore = false;
                     Type[] gat = f_info.FieldType.GetGenericArguments();
@@ -372,7 +380,7 @@ namespace xuexue.LitJson
                     PropertyMetadata p_data = new PropertyMetadata();
                     p_data.Info = f_info;
                     p_data.IsField = true;
-
+                    p_data.Priority = 0;
                     props.Add(p_data);
 
                     continue;
@@ -387,7 +395,7 @@ namespace xuexue.LitJson
                     PropertyMetadata p_data = new PropertyMetadata();
                     p_data.Info = f_info;
                     p_data.IsField = true;
-
+                    p_data.Priority = f_info.GetCustomAttribute<xuexueJson>().priority;
                     props.Add(p_data);
                     continue; //应该被忽略
                 }
@@ -400,11 +408,12 @@ namespace xuexue.LitJson
                     PropertyMetadata p_data = new PropertyMetadata();
                     p_data.Info = f_info;
                     p_data.IsField = true;
-
+                    p_data.Priority = 0;
                     props.Add(p_data);
                 }
             }
 
+            props.Sort((p1, p2) => { return p1.Priority - p2.Priority; });
 
             lock (type_properties_lock) {
                 try {

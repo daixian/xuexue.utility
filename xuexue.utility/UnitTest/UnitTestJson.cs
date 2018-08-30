@@ -38,7 +38,7 @@ namespace UnitTest
     {
         public int a;
 
-        [xuexueJson]
+        [xuexueJson(priority =1)]
         public float b;
 
         [xuexueJsonIgnore]
@@ -53,6 +53,38 @@ namespace UnitTest
 
         [xuexueJson]
         public DateTime dt;
+
+        [xuexueJsonIgnore]
+        public int testpriority;
+
+        [xuexueJson(priority = -10)]
+        public int testpriority2;
+
+        [xuexueJson(priority =10)]
+        private bool AutoUpdateBeforeToJson
+        {
+            set { }
+            get
+            {
+                if (testpriority != -1)
+                {
+                    throw new Exception("优先级测试失败！");
+                }
+                return true;
+            }
+        }
+
+        [xuexueJson(priority = -1)]
+        private bool AutoUpdateBeforeToJson2
+        {
+            set { }
+            get
+            {
+                testpriority2 = 999;
+                testpriority = -1;
+                return true;
+            }
+        }
     }
 
     public class TestLitJson3IM 
@@ -78,6 +110,7 @@ namespace UnitTest
         }
     }
 
+    [xuexueJsonClass(defaultFieldConstraint = false, defaultPropertyConstraint = false)]
     public class TestLitJson4
     {
         [xuexueJson]
@@ -158,13 +191,18 @@ namespace UnitTest
 
             TestLitJson4 tlj4 = new TestLitJson4() { a = 12 };
             string str4 = JsonMapper.ToJson(tlj4);
+            TestLitJson4 tlj4_1 = JsonMapper.ToObject<TestLitJson4>(str4);
+            Assert.IsTrue(tlj4.a == tlj4_1.a);
 
             float t1b = 2;
-            TestLitJson3 t1 = new TestLitJson3() { a = 1, b = t1b, c = 3, dt = DateTime.Now };
+            TestLitJson3 t1 = new TestLitJson3() { a = 1, b = t1b, c = 3, dt = DateTime.Now, testpriority2 = 5 };
             TestLitJson3 t2 = new TestLitJson3() { a = 5, b = 6, c = 7 };
 
             string str = JsonMapper.ToJson(t1);
-            TestLitJson3 obj = JsonMapper.ToObject<TestLitJson3>(str);
+            TestLitJson3 rest1 = JsonMapper.ToObject<TestLitJson3>(str);
+
+            Assert.IsTrue(rest1.testpriority2 == 5);
+
             JsonMapper.OverrideObject(str, t2);
             Assert.IsTrue(t2.a == t1.a);
             Assert.IsTrue(t2.b == t1.b);
