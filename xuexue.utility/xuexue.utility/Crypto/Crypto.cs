@@ -15,14 +15,14 @@ namespace xuexue.crypto
         private static byte[] _IV = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF, 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
 
         /// <summary>
-        /// AES加密，传入一个文件流（从当前流位置开始工作），和之后要读取的流长度。
+        /// AES加密，传入一个文件流（从当前流位置开始工作），和之后要读取的流长度。密钥长度为16字节
         /// 产生的输出流是：一个int的原始文件长度 + 加密流。
         /// </summary>
-        /// <param name="inStream"></param>
-        /// <param name="length"></param>
-        /// <param name="outStream"></param>
-        /// <param name="key"></param>
-        /// <param name="blockLen"></param>
+        /// <param name="inStream">输入流</param>
+        /// <param name="length">从输入流里读取的长度</param>
+        /// <param name="outStream">输出结果流</param>
+        /// <param name="key">密钥（16字节）</param>
+        /// <param name="blockLen">(Optional)加密时的块长度</param>
         /// <returns></returns>
         public static int AESEncrypt(Stream inStream, int length, Stream outStream, byte[] key, int blockLen = 4096)
         {
@@ -71,14 +71,13 @@ namespace xuexue.crypto
         }
 
         /// <summary>
-        /// AES解密。
+        /// AES解密，将AESEncrypt的结果作为输入传入，输出一个解密后的流。.
         /// </summary>
-        /// <param name="inStream"></param>
-        /// <param name="length"></param>
-        /// <param name="outStream"></param>
-        /// <param name="key"></param>
-        /// <param name="blockLen"></param>
-        /// <returns></returns>
+        /// <param name="inStream">  加密过的整个流. </param>
+        /// <param name="outStream"> 输出解密结果流. </param>
+        /// <param name="key">       密钥. </param>
+        /// <param name="blockLen">  (Optional)解密时的块长度</param>
+        /// <returns> An int. </returns>
         public static int AESDecrypt(Stream inStream, Stream outStream, byte[] key, int blockLen = 4096)
         {
             SymmetricAlgorithm des = Rijndael.Create();

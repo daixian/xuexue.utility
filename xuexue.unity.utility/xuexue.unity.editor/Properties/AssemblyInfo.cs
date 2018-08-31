@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("xuexue.utility")]
+[assembly: AssemblyTitle("xuexue.unity.editor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("xuexue.utility")]
+[assembly: AssemblyProduct("xuexue.unity.editor")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("05ffa182-2488-4a6a-bb5d-47a7aa75090a")]
+[assembly: Guid("6fd436ec-91b5-4105-8e01-99198d5ec032")]
 
 // 程序集的版本信息由下列四个值组成: 
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 //通过使用 "*"，如下所示:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.66.0831")]
-[assembly: AssemblyFileVersion("1.1.66.0831")]
+[assembly: AssemblyVersion("0.0.4.0831")]
+[assembly: AssemblyFileVersion("0.0.4.0831")]
