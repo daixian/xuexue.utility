@@ -38,7 +38,7 @@ namespace xuexue.unity.utility.unittest
                         if (m.IsDefined(typeof(TestMethod)))
                         {
                             m.Invoke(obj, new object[] { });
-                            Debug.Log($"<color=#00ff00ff>UnityTest.Run():执行测试{t.Name}.{m.Name}通过！</color>");
+                            Debug.Log($"<color=#00ff00ff>UnityTest.Run():执行测试 {t.Name}.{m.Name} 通过！</color>");
                         }
                     }
                 }
