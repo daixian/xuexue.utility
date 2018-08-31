@@ -1,0 +1,113 @@
+﻿using System;
+using System.IO;
+using System.Security.Cryptography;
+
+namespace xuexue.crypto
+{
+    /// <summary>
+    /// 加密解密
+    /// </summary>
+    public class Crypto
+    {
+        /// <summary>
+        /// 默认密钥向量
+        /// </summary>
+        private static byte[] _IV = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF, 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
+
+        /// <summary>
+        /// AES加密，传入一个文件流（从当前流位置开始工作），和之后要读取的流长度。
+        /// 产生的输出流是：一个int的原始文件长度 + 加密流。
+        /// </summary>
+        /// <param name="inStream"></param>
+        /// <param name="length"></param>
+        /// <param name="outStream"></param>
+        /// <param name="key"></param>
+        /// <param name="blockLen"></param>
+        /// <returns></returns>
+        public static int AESEncrypt(Stream inStream, int length, Stream outStream, byte[] key, int blockLen = 4096)
+        {
+            //分组加密算法
+            SymmetricAlgorithm des = Rijndael.Create();
+            des.Key = key;//设置密钥及密钥向量
+            des.IV = _IV;
+            CryptoStream cs = new CryptoStream(outStream, des.CreateEncryptor(), CryptoStreamMode.Write);
+
+            outStream.Position = 0;
+            outStream.Write(BitConverter.GetBytes(length), 0, sizeof(int));//写入一个整个文件长度
+
+            byte[] inputBuffer = new byte[blockLen];//数据buffer
+            int lenRead = 0;//已读输入数据长度
+
+            while (true)
+            {
+                bool isEnd = false;
+
+                int wantReadLen = blockLen;//希望读取的长度
+                if (lenRead + blockLen >= length)//这是最后一次读取
+                {
+                    wantReadLen = length - lenRead;
+                }
+
+                int len = inStream.Read(inputBuffer, 0, wantReadLen);
+                lenRead += len;//已读输入数据长度增加
+
+                if (len < wantReadLen)
+                {
+                    isEnd = true;
+                }
+
+                cs.Write(inputBuffer, 0, len);
+                if (lenRead == length)
+                {
+                    break;
+                }
+                if (isEnd)
+                {
+                    break;
+                }
+            }
+            cs.FlushFinalBlock();
+            return lenRead;
+        }
+
+        /// <summary>
+        /// AES解密。
+        /// </summary>
+        /// <param name="inStream"></param>
+        /// <param name="length"></param>
+        /// <param name="outStream"></param>
+        /// <param name="key"></param>
+        /// <param name="blockLen"></param>
+        /// <returns></returns>
+        public static int AESDecrypt(Stream inStream, Stream outStream, byte[] key, int blockLen = 4096)
+        {
+            SymmetricAlgorithm des = Rijndael.Create();
+            des.Key = key;
+            des.IV = _IV;
+            CryptoStream cs = new CryptoStream(inStream, des.CreateDecryptor(), CryptoStreamMode.Read);
+
+            //首先读一个文件总长有效数据长度
+            byte[] lenBuffer = new byte[sizeof(int)];
+            inStream.Read(lenBuffer, 0, lenBuffer.Length);
+            int filelen = BitConverter.ToInt32(lenBuffer, 0);
+
+            byte[] decryptBytes = new byte[blockLen];//解密后的原始数据
+
+            int lenWrite = 0;//解密出来的有效数据的总长度
+            while (true)
+            {
+                int decryptLen = cs.Read(decryptBytes, 0, blockLen);//成功解密出来的长度
+                lenWrite += decryptLen;
+                cs.Flush();
+                outStream.Write(decryptBytes, 0, decryptLen);
+
+                if (lenWrite >= filelen)
+                {
+                    break;
+                }
+            }
+            outStream.Flush();
+            return lenWrite;
+        }
+    }
+}
