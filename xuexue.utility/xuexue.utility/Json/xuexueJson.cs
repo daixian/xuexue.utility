@@ -7,7 +7,7 @@ namespace xuexue.LitJson
     /// <summary>
     /// 一个有爱且好用的LitJson扩展类。
     /// 这是一个Json行为的策略配置，可以标记在类的上面，也注册到到一个字典中。
-    /// 没有写的话就是默认配置，和写了之后没有专门设置是一样的。
+    /// 没有写的话就是默认配置，和写了一个属性注解之后，没有专门设置其中字段的效果是一样的。
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class xuexueJsonClass : Attribute
@@ -47,7 +47,6 @@ namespace xuexue.LitJson
         /// 属性的反射Flags
         /// </summary>
         public BindingFlags propertyflags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
-
 
         #region 附加条件
 
@@ -98,6 +97,7 @@ namespace xuexue.LitJson
     {
         static JsonTypeRegister()
         {
+            //默认注册一个float的支持
             JsonMapper.RegisterExporter<float>((obj, writer) => writer.Write(Convert.ToDouble(obj)));
             JsonMapper.RegisterImporter<double, float>(input => Convert.ToSingle(input));
         }
@@ -121,16 +121,16 @@ namespace xuexue.LitJson
         /// 给一个类型绑定一个Json设置
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="xxjsonClass"></param>
-        public static void BindType(Type type, xuexueJsonClass xxjsonClass)
+        /// <param name="xxjc"></param>
+        public static void BindType(Type type, xuexueJsonClass xxjc)
         {
             if (!dictTypeXXJC.ContainsKey(type))
             {
-                dictTypeXXJC.Add(type, xxjsonClass);
+                dictTypeXXJC.Add(type, xxjc);
             }
             else
             {
-                dictTypeXXJC[type] = xxjsonClass;
+                dictTypeXXJC[type] = xxjc;
             }
         }
 
