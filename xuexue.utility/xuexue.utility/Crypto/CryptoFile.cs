@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace xuexue.crypto
 {
@@ -12,7 +8,6 @@ namespace xuexue.crypto
     /// </summary>
     public class CryptoFile
     {
-
         /// <summary>
         /// 一个已经加密的文件路径
         /// </summary>
@@ -39,60 +34,52 @@ namespace xuexue.crypto
         public string info = "";
 
         /// <summary>
-        /// 原始数据流（这个流从0位置开始都是有效的原始数据）
+        /// 加密文件的流，这个流从0位置到开始都是加密文件数据，包括前面的info信息。
         /// </summary>
-        public Stream oriStream;
+        public Stream enStream;
 
         /// <summary>
-        /// 这个整个加密文件的流（这个流从0位置到开始都是有效的加密文件数据）
+        /// 解密流，原始数据流（这个流从0位置开始都是有效的原始数据）
         /// </summary>
-        public Stream cfStream;
+        public Stream deStream;
 
         /// <summary>
-        /// 进行一个初步的初始化，主要判断文件是不是已知的加密文件，解密数据流就默认是一个MemoryStream。
+        /// 解密一个文件
         /// </summary>
-        public bool initWithCFPath(string cfPath)
+        public static CryptoFile Decrypt(string cfFilePath, Stream deStream)
         {
-            if (!File.Exists(cfPath))//如果传进来的文件不存在那么就直接退出
+            if (!File.Exists(cfFilePath))//如果传进来的文件不存在那么就直接退出
             {
-                return false;
+                return null;
             }
 
-
-
-
-
-            return true;
+            return null;
         }
 
         /// <summary>
         /// 输入一个原始文件路径，初始化整个类成员。加密数据流就默认是一个MemoryStream。
+        /// 这个函数之后要调用MakeCFStream()函数去完成加密。
         /// </summary>
         /// <param name="oriPath"></param>
         /// <returns></returns>
-        public bool initWithOriPath(string oriPath)
+        public static CryptoFile Encrypt(string oriFilePath, string info, Stream enStream, byte[] key, int blockLen = 4096)
         {
-            if (!File.Exists(oriPath))//如果传进来的文件不存在那么就直接退出
+            if (!File.Exists(oriFilePath))//如果传进来的文件不存在那么就直接退出
             {
-                return false;
+                return null;
             }
-            md5 = xuexue.file.MD5Helper.FileMD5(oriPath);
-            oriStream = new FileStream(oriPath, FileMode.Open);
 
-            return true;
-        }
+            CryptoFile cfile = new CryptoFile();
+            cfile.md5 = xuexue.file.MD5Helper.FileMD5(oriFilePath);
+            cfile.info = info;
+            cfile.enStream = enStream;//设置加密流
+            cfile.deStream = new FileStream(oriFilePath, FileMode.Open);//原始数据流就是解密流，读文件
 
-        /// <summary>
-        /// 使用当前的成员来构造加密流，调用完毕之后整个加密流就可以随便使用了。这个函数不会关闭加密流。
-        /// </summary>
-        public void MakeCFStream(byte[] key)
-        {
-            cfStream.Position = 0;
-            StreamWriter sw = new StreamWriter(cfStream);
-            sw.WriteLine(header);//先写一个文件头(使用一行)
+            StreamWriter sw = new StreamWriter(cfile.enStream);
+            sw.WriteLine(cfile.header);//先写一个文件头(使用一行)
 
-            byte[] bymd5 = Encoding.UTF8.GetBytes(md5);
-            byte[] byInfo = Encoding.UTF8.GetBytes(info);
+            byte[] bymd5 = Encoding.UTF8.GetBytes(cfile.md5);
+            byte[] byInfo = Encoding.UTF8.GetBytes(cfile.info);
             int headerLen = bymd5.Length + byInfo.Length;
             sw.Write(headerLen);//写一个头的总长度.
 
@@ -103,10 +90,11 @@ namespace xuexue.crypto
             sw.Write(byInfo);
             sw.Flush();
 
-            oriStream.Position = 0;
-            Crypto.AESEncrypt(oriStream, oriStream.Length, cfStream, key);
+            //enStream.Position = 0;
+            //使用原始文件流，原始文件流的长度
+            Crypto.AESEncrypt(cfile.deStream, cfile.deStream.Length, enStream, key);
 
+            return null;
         }
-
     }
 }
