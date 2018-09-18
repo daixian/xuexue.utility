@@ -7,6 +7,24 @@ namespace xuexue.file
     public static class MD5Helper
     {
         /// <summary>
+        /// 计算一个流的md5，不能设置起始和结束,从起始计算到结束
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static string MD5(Stream stream)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider();
+            stream.Position = 0;
+            byte[] retVal = md5.ComputeHash(stream);
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (byte b in retVal)
+            {
+                stringBuilder.Append(b.ToString("x2"));
+            }
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
         /// 计算一个文件的MD5,返回文本值。
         /// </summary>
         /// <param name="filePath">文件路径</param>

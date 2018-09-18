@@ -43,58 +43,82 @@ namespace xuexue.crypto
         /// </summary>
         public Stream deStream;
 
-        /// <summary>
-        /// 解密一个文件
-        /// </summary>
-        public static CryptoFile Decrypt(string cfFilePath, Stream deStream)
+        ///-------------------------------------------------------------------------------------------------
+        /// <summary> 解密一个文件. </summary>
+        ///
+        /// <remarks> Surface, 2018/9/18. </remarks>
+        ///
+        /// <param name="enStream"> 加密文件的流，这个流从0位置到开始都是加密文件数据，包括前面的info信息。. </param>
+        /// <param name="deStream"> 解密流，原始数据流（这个流从0位置开始都是有效的原始数据）. </param>
+        /// <param name="key">      The key. </param>
+        /// <param name="blockLen"> (Optional) 加密buffer长度. </param>
+        ///
+        /// <returns> A CryptoFile. </returns>
+        ///-------------------------------------------------------------------------------------------------
+        public static CryptoFile Decrypt(Stream enStream, Stream deStream, byte[] key, int blockLen = 4096)
         {
-            if (!File.Exists(cfFilePath))//如果传进来的文件不存在那么就直接退出
+            CryptoFile cfile = new CryptoFile() { isCryptoFile = true, enStream = enStream, deStream = deStream };
+            byte[] byheader = Encoding.UTF8.GetBytes(cfile.header);
+            enStream.Position = 0;
+            BinaryReader br = new BinaryReader(enStream);
+            //验证文件头是否是加密文件
+            for (int i = 0; i < byheader.Length; i++)
             {
-                return null;
+                if (br.ReadByte() != byheader[i])
+                {
+                    cfile.isCryptoFile = false;
+                    break;
+                }
+            }
+            if (cfile.isCryptoFile == false)
+            {
+                return cfile;
             }
 
-            return null;
+            cfile.md5 = br.ReadString();
+            cfile.info = br.ReadString();
+
+            cfile.deStream.Position = 0;
+            Crypto.AESDecrypt(enStream, cfile.deStream, key, blockLen);
+
+            return cfile;
         }
 
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>
         /// 输入一个原始文件路径，初始化整个类成员。加密数据流就默认是一个MemoryStream。
-        /// 这个函数之后要调用MakeCFStream()函数去完成加密。
+        /// 这个函数之后要调用MakeCFStream()函数去完成加密。.
         /// </summary>
-        /// <param name="oriPath"></param>
-        /// <returns></returns>
-        public static CryptoFile Encrypt(string oriFilePath, string info, Stream enStream, byte[] key, int blockLen = 4096)
+        ///
+        /// <remarks> Surface, 2018/9/18. </remarks>
+        ///
+        /// <param name="oriFilePath"> . </param>
+        /// <param name="info">        一些可以被记录的其他附加信息. </param>
+        /// <param name="enStream">    加密文件的流，这个流从0位置到开始都是加密文件数据，包括前面的info信息。. </param>
+        /// <param name="key">         The key. </param>
+        /// <param name="blockLen">    (Optional) 加密buffer长度 </param>
+        ///
+        /// <returns> A CryptoFile. </returns>
+        ///-------------------------------------------------------------------------------------------------
+        public static CryptoFile Encrypt(Stream oriStream, string info, Stream enStream, byte[] key, int blockLen = 4096)
         {
-            if (!File.Exists(oriFilePath))//如果传进来的文件不存在那么就直接退出
-            {
-                return null;
-            }
-
-            CryptoFile cfile = new CryptoFile();
-            cfile.md5 = xuexue.file.MD5Helper.FileMD5(oriFilePath);
+            CryptoFile cfile = new CryptoFile() { isCryptoFile = true };
+            cfile.md5 = xuexue.file.MD5Helper.MD5(oriStream);
             cfile.info = info;
             cfile.enStream = enStream;//设置加密流
-            cfile.deStream = new FileStream(oriFilePath, FileMode.Open);//原始数据流就是解密流，读文件
+            cfile.deStream = oriStream;//原始数据流就是解密流
+            cfile.deStream.Position = 0;
 
-            StreamWriter sw = new StreamWriter(cfile.enStream);
-            sw.WriteLine(cfile.header);//先写一个文件头(使用一行)
+            BinaryWriter bw = new BinaryWriter(cfile.enStream);
+            bw.Write(Encoding.UTF8.GetBytes(cfile.header));//先写一个文件头,这样写不带长度
+            bw.Write(cfile.md5);//写一个md5信息，这个自带string长度
+            bw.Write(cfile.info);//写一个info信息，这个自带string长度
 
-            byte[] bymd5 = Encoding.UTF8.GetBytes(cfile.md5);
-            byte[] byInfo = Encoding.UTF8.GetBytes(cfile.info);
-            int headerLen = bymd5.Length + byInfo.Length;
-            sw.Write(headerLen);//写一个头的总长度.
+            bw.Flush();
 
-            sw.Write(bymd5.Length);//写一个md5信息
-            sw.Write(bymd5);
-
-            sw.Write(byInfo.Length);//写一个info信息
-            sw.Write(byInfo);
-            sw.Flush();
-
-            //enStream.Position = 0;
             //使用原始文件流，原始文件流的长度
             Crypto.AESEncrypt(cfile.deStream, cfile.deStream.Length, enStream, key);
-
-            return null;
+            return cfile;
         }
     }
 }
