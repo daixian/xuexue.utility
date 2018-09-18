@@ -82,7 +82,7 @@ namespace UnitTest
 
             MemoryStream msIn = new MemoryStream(data);//使用原始数据生成一个流
             MemoryStream msAES = new MemoryStream();//加密后的数据
-            CryptoFile.Encrypt(msIn, "加密测试123", msAES, key);
+            CryptoFile cfFile1= CryptoFile.Encrypt(msIn, "加密测试123", msAES, key);
 
             msAES.Position = 0;//把加密后的数据流置回头
 
@@ -98,6 +98,8 @@ namespace UnitTest
                 Assert.IsTrue(data[i] == dataEDResult[i]);
             }
 
+            Assert.IsTrue(cfFile1.info == cfFile.info);
+            Assert.IsTrue(cfFile1.md5 == cfFile.md5);
         }
     }
 }

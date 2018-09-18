@@ -4,7 +4,7 @@ using System.Text;
 namespace xuexue.crypto
 {
     /// <summary>
-    /// 加密文件定义
+    /// 加密文件定义，增加一个文件头一个md5文本一个info
     /// </summary>
     public class CryptoFile
     {
@@ -44,11 +44,11 @@ namespace xuexue.crypto
         public Stream deStream;
 
         ///-------------------------------------------------------------------------------------------------
-        /// <summary> 解密一个文件. </summary>
+        /// <summary> 解密一个文件流. </summary>
         ///
         /// <remarks> Surface, 2018/9/18. </remarks>
         ///
-        /// <param name="enStream"> 加密文件的流，这个流从0位置到开始都是加密文件数据，包括前面的info信息。. </param>
+        /// <param name="enStream"> 加密文件的流，这个流从0位置到开始都是加密文件数据，包括前面的info信息. </param>
         /// <param name="deStream"> 解密流，原始数据流（这个流从0位置开始都是有效的原始数据）. </param>
         /// <param name="key">      The key. </param>
         /// <param name="blockLen"> (Optional) 加密buffer长度. </param>
@@ -85,18 +85,15 @@ namespace xuexue.crypto
         }
 
         ///-------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 输入一个原始文件路径，初始化整个类成员。加密数据流就默认是一个MemoryStream。
-        /// 这个函数之后要调用MakeCFStream()函数去完成加密。.
-        /// </summary>
+        /// <summary> 加密一个文件流. </summary>
         ///
         /// <remarks> Surface, 2018/9/18. </remarks>
         ///
-        /// <param name="oriFilePath"> . </param>
-        /// <param name="info">        一些可以被记录的其他附加信息. </param>
-        /// <param name="enStream">    加密文件的流，这个流从0位置到开始都是加密文件数据，包括前面的info信息。. </param>
-        /// <param name="key">         The key. </param>
-        /// <param name="blockLen">    (Optional) 加密buffer长度 </param>
+        /// <param name="oriStream"> 原始文件流. </param>
+        /// <param name="info">      一些可以被记录的其他附加信息. </param>
+        /// <param name="enStream">  加密文件的流，这个流从0位置到开始都是加密文件数据，包括前面的info信息。. </param>
+        /// <param name="key">       The key. </param>
+        /// <param name="blockLen">  (Optional) 加密buffer长度. </param>
         ///
         /// <returns> A CryptoFile. </returns>
         ///-------------------------------------------------------------------------------------------------

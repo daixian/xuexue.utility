@@ -67,6 +67,9 @@ namespace xuexue.crypto
                 }
             }
             cs.FlushFinalBlock();
+
+            //将来CryptoStream考虑Clear(),现在clear之后会关闭流，引起使用的不方便，最好考虑把包装器传出去
+
             return lenRead;
         }
 
@@ -106,6 +109,9 @@ namespace xuexue.crypto
                 }
             }
             outStream.Flush();
+
+            //将来CryptoStream考虑Clear(),现在clear之后会关闭流，引起使用的不方便，最好考虑把包装器传出去
+
             return lenWrite;
         }
     }
