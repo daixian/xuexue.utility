@@ -8,6 +8,8 @@ namespace xuexue.LitJson
     /// 一个有爱且好用的LitJson扩展类。
     /// 这是一个Json行为的策略配置，可以标记在类的上面，也注册到到一个字典中。
     /// 没有写的话就是默认配置，和写了一个属性注解之后，没有专门设置其中字段的效果是一样的。
+    /// * 默认反射字段
+    /// * 默认不反射属性
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class xuexueJsonClass : Attribute
