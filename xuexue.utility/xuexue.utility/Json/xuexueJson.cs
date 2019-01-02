@@ -6,10 +6,10 @@ namespace xuexue.LitJson
 {
     /// <summary>
     /// 一个有爱且好用的LitJson扩展类。
-    /// 这是一个Json行为的策略配置，可以标记在类的上面，也注册到到一个字典中。
+    /// 这是一个Json行为的策略配置，可以标记在类的上面，也可以使用JsonTypeRegister注册到一个字典中。
     /// 没有写的话就是默认配置，和写了一个属性注解之后，没有专门设置其中字段的效果是一样的。
-    /// * 默认反射字段
-    /// * 默认不反射属性
+    /// - 默认反射字段
+    /// - 默认不反射属性
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class xuexueJsonClass : Attribute
@@ -95,6 +95,23 @@ namespace xuexue.LitJson
     /// <summary>
     /// 注册类的配置类型
     /// </summary>
+    /// 
+    /// <sample>
+    ///     绑定类型，在程序一运行的最早就应执行。
+    ///     Bind()
+    ///     {
+    ///         //设置自定义的绑定类型
+    ///         JsonTypeRegister.BindType(typeof(Vector3), new xuexueJsonClass("x", "y", "z") { defaultFieldConstraint = false, defaultPropertyConstraint = false });
+    ///         JsonTypeRegister.BindType(typeof(Quaternion), new xuexueJsonClass("x", "y", "z", "w") { defaultFieldConstraint = false, defaultPropertyConstraint = false });
+    ///
+    ///         //设置Json忽略类型
+    ///         JsonTypeRegister.AddIgnoreClass(typeof(GameObject));
+    ///         JsonTypeRegister.AddIgnoreClass(typeof(Transform));
+    ///         JsonTypeRegister.AddIgnoreClass(typeof(Sprite));
+    ///         JsonTypeRegister.AddIgnoreClass(typeof(Texture2D));
+    ///
+    ///     }
+    /// </sample>
     public static class JsonTypeRegister
     {
         static JsonTypeRegister()
