@@ -43,6 +43,7 @@
     <Compile Include="Data\RootDir.cs" />
     <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\MD5Helper.cs" />
+    <Compile Include="Helper\ExtensionMethod.cs" />
     <Compile Include="Json\IIntermediary.cs" />
     <Compile Include="Json\xuexueJson.cs" />
     <Compile Include="Json\xuexueJsonTest.cs" />
@@ -58,10 +59,13 @@
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="File\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_StartDate="2000/1/1" BuildVersion_UseGlobalSettings="True" />
+      <UserProperties BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2000/1/1" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

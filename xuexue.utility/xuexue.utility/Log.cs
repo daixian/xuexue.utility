@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace xuexue.file
+namespace xuexue.utility
 {
     /// <summary>
     /// 这个模块的日志对外接口,添加对应log事件即可对外输出日志。
