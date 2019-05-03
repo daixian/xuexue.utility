@@ -12,8 +12,17 @@ namespace xuexue.utility.Incremental.DTO
     public class DownloadFileItem : Fileitem
     {
         /// <summary>
+        /// 从一个Fileitem构造
+        /// </summary>
+        /// <param name="fi"></param>
+        public DownloadFileItem(Fileitem fi) : base(fi)
+        {
+
+        }
+
+        /// <summary>
         /// 下载url
         /// </summary>
-        string url;
+        public string url;
     }
 }

@@ -30,5 +30,22 @@ namespace xuexue.utility.Incremental.DTO
         /// 所有的文件项
         /// </summary>
         public List<Fileitem> files = new List<Fileitem>();
+
+        /// <summary>
+        /// 是否包含了某项文件
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool IsContainFile(Fileitem item)
+        {
+            for (int i = 0; i < files.Count; i++)
+            {
+                if (files[i] == item)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

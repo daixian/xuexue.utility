@@ -10,7 +10,7 @@ using xuexue.LitJson;
 namespace xuexue.utility.Incremental
 {
     /// <summary>
-    /// 增量更新
+    /// 增量更新,c#部分的功能吧
     /// </summary>
     public class IncrementalUpdate
     {
@@ -34,9 +34,11 @@ namespace xuexue.utility.Incremental
                 return;
             }
 
-            SoftFile softFile = new SoftFile();
-            softFile.version = version;
-            softFile.rootPath = di.FullName;
+            SoftFile softFile = new SoftFile
+            {
+                version = version,
+                rootPath = di.FullName
+            };
 
             FileInfo[] fis = di.GetFiles("*", SearchOption.AllDirectories);//无筛选的得到所有文件
             for (int i = 0; i < fis.Length; i++)
@@ -67,11 +69,30 @@ namespace xuexue.utility.Incremental
         }
 
         /// <summary>
-        /// 得到需要下载的文件列表
+        /// 新老版本两版软件之间的需要更新的文件列表
         /// </summary>
-        public static void DownloadFileList()
+        /// <param name="verOld"></param>
+        /// <param name="verNew"></param>
+        /// <param name="urlRoot"></param>
+        public static DownloadList CompareToDownloadList(SoftFile verOld, SoftFile verNew, string urlRoot)
         {
+            DownloadList downloadList = new DownloadList
+            {
+                curVersion = verOld.version, //当前版本
+                targetVersion = verNew.version //目标版本
+            };
 
+            //遍历所有新文件
+            foreach (var item in verNew.files)
+            {   //如果这一项在老文件里包含了,那么就不用下载
+                if (!verOld.IsContainFile(item))
+                {
+                    DownloadFileItem dfi = new DownloadFileItem(item);
+                    downloadList.files.Add(dfi);
+                }
+            }
+
+            return downloadList;
         }
     }
 }
