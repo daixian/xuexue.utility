@@ -37,7 +37,7 @@ namespace xuexue.utility
         /// 计算SHA256,发生错误则返回null
         /// </summary>
         /// <param name="fi"></param>
-        /// <returns></returns>
+        /// <returns>SHA256的字符串,16进制表示,大写字母</returns>
         public static string SHA256(this FileInfo fi)
         {
             //如果文件存在
@@ -62,10 +62,10 @@ namespace xuexue.utility
         }
 
         /// <summary>
-        /// 计算文件夹里的所有文件
+        /// 计算文件夹里的所有文件,返回一个相对文件路径和SHA256的字典
         /// </summary>
         /// <param name="di"></param>
-        /// <returns></returns>
+        /// <returns>相对文件路径为key,SHA256为value</returns>
         public static Dictionary<string, string> SHA256(this DirectoryInfo di)
         {
             if (!di.Exists)

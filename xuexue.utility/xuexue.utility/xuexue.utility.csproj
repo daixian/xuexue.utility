@@ -44,6 +44,11 @@
     <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\MD5Helper.cs" />
     <Compile Include="Helper\ExtensionMethod.cs" />
+    <Compile Include="Incremental\DTO\DownloadFileItem.cs" />
+    <Compile Include="Incremental\DTO\DownloadList.cs" />
+    <Compile Include="Incremental\DTO\Fileitem.cs" />
+    <Compile Include="Incremental\DTO\SoftFile.cs" />
+    <Compile Include="Incremental\IncrementalUpdate.cs" />
     <Compile Include="Json\IIntermediary.cs" />
     <Compile Include="Json\xuexueJson.cs" />
     <Compile Include="Json\xuexueJsonTest.cs" />
@@ -59,13 +64,11 @@
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="File\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2000/1/1" />
+      <UserProperties BuildVersion_StartDate="2000/1/1" BuildVersion_UseGlobalSettings="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

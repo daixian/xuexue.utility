@@ -8,8 +8,8 @@ namespace xuexue.LitJson
     /// 一个有爱的Json扩展类。写了一大半，发现了另外一条路= =!
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field)]
-    [Obsolete]
-     class xuexueJsonTest : Attribute
+    [Obsolete("写了一大半，发现了另外一条路= =!")]
+    class xuexueJsonTest : Attribute
     {
         //是否注册过了float
         private static bool isRegisterType = false;
@@ -65,7 +65,7 @@ namespace xuexue.LitJson
             if (!objType.IsDefined(typeof(xuexueJsonTest), false))//第二个参数表示不搜索继承链
             {
                 //如果这个类没有加属性
-               // throw new Exception($"这个类{objType}没有定义xuexueJson！");
+                // throw new Exception($"这个类{objType}没有定义xuexueJson！");
             }
             jw.WriteObjectStart();
             jw.WritePropertyName("xuexue");

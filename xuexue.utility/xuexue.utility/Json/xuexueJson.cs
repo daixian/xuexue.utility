@@ -92,10 +92,11 @@ namespace xuexue.LitJson
     {
     }
 
+
     /// <summary>
     /// 注册类的配置类型
     /// </summary>
-    /// 
+    ///
     /// <sample>
     ///     绑定类型，在程序一运行的最早就应执行。
     ///     Bind()
