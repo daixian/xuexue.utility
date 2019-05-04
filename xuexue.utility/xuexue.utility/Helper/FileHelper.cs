@@ -6,6 +6,7 @@ using xuexue.utility;
 
 namespace xuexue.file
 {
+    [Obsolete("写的不好,不再使用")]
     public static class FileHelper
     {
         /// <summary>

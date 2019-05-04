@@ -11,6 +11,7 @@ namespace xuexue.file
     /// <summary>
     /// 某一个文件夹的根目录,它应该有在一直维护一个Json文件，记录着当前的文件夹状态。
     /// </summary>
+    [Obsolete("写的不好,不再使用")]
     public class RootDir
     {
         /// <summary>

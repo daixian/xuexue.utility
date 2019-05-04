@@ -9,6 +9,7 @@ namespace xuexue.file
     /// <summary>
     /// 一个文件的记录项
     /// </summary>
+    [Obsolete("写的不好,不再使用")]
     public class FileItem
     {
         /// <summary>

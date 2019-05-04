@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using xuexue.utility;
 
 namespace xuexue.file
 {
+    [Obsolete("写的不好,不再使用")]
     public static class MD5Helper
     {
         /// <summary>
