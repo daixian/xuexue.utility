@@ -16,9 +16,14 @@ namespace xuexue.utility.Incremental
     {
 
         /// <summary>
-        /// 创建一个配置文件
+        /// 计算一个软件版本文件
         /// </summary>
-        public static void CreateSoftVersionFile(string dirPath, uint[] version, string rootUrl, string saveFilePath)
+        /// <param name="rootPath">写进json的软件安装目录</param>
+        /// <param name="version"></param>
+        /// <param name="rootUrl"></param>
+        /// <param name="dirPath">要计算的文件夹</param>
+        /// <param name="saveJsonPath">要保存的json文件位置</param>
+        public static void CreateSoftVersionFile(string rootPath, uint[] version, string rootUrl, string dirPath, string saveJsonPath)
         {
 
             if (version == null || version.Length != 4)
@@ -37,7 +42,7 @@ namespace xuexue.utility.Incremental
             SoftFile softFile = new SoftFile
             {
                 version = version,
-                rootPath = di.FullName,
+                rootPath = rootPath,
                 rootUrl = rootUrl
             };
 
@@ -62,7 +67,7 @@ namespace xuexue.utility.Incremental
                 softFile.files.Add(item);
             }
 
-            StreamWriter sw = File.CreateText(saveFilePath);
+            StreamWriter sw = File.CreateText(saveJsonPath);
             JsonWriter jw = new JsonWriter(sw) { PrettyPrint = true };
             JsonMapper.ToJson(softFile, jw);
             sw.Flush();

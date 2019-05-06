@@ -131,5 +131,33 @@ namespace xuexue.utility
             return null;
         }
 
+        /// <summary>
+        /// 文件相对文件夹的路径
+        /// </summary>
+        /// <param name="di">根文件夹</param>
+        /// <param name="fi">目前是文件夹内的一个文件</param>
+        /// <returns></returns>
+        public static string RelativePath(this DirectoryInfo di, DirectoryInfo drc)
+        {
+            //转义正则里面的\
+            Match m = Regex.Match(drc.FullName, "^" + di.FullName.Replace("\\", "\\\\"));
+            if (m.Success)
+            {
+                string rpath;
+                if (di.FullName.EndsWith("\\") || di.FullName.EndsWith("/"))
+                {
+                    rpath = drc.FullName.Substring(m.Index + m.Length).Replace("\\", "/");
+                }
+                else
+                {
+                    //为了相对路径结果前面不带斜杠,所以+1
+                    rpath = drc.FullName.Substring(m.Index + m.Length + 1).Replace("\\", "/");
+                }
+                return rpath;
+            }
+            Log.Error($"ExtensionMethod.RelativePath():暂时不支持不在文件夹内的文件,dir={di.FullName} , drc={drc.FullName}!");
+            return null;
+        }
+
     }
 }
