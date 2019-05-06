@@ -18,7 +18,7 @@ namespace UnitTest
         [TestMethod]
         public void CreateConfigFile()
         {
-            IncrementalUpdate.CreateConfigFile(".", new uint[] { 0, 0, 1, 0 }, "./config.json");
+            IncrementalUpdate.CreateSoftVersionFile(".", new uint[] { 0, 0, 1, 0 }, null, "./config.json");
         }
     }
 }

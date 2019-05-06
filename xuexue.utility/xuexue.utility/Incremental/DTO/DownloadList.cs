@@ -25,5 +25,22 @@ namespace xuexue.utility.Incremental.DTO
         /// 所有的文件项
         /// </summary>
         public List<DownloadFileItem> files = new List<DownloadFileItem>();
+
+        /// <summary>
+        /// 是否相对路径在files里面
+        /// </summary>
+        /// <param name="relativePath"></param>
+        /// <returns></returns>
+        public bool IsRelativePathInFiles(string relativePath)
+        {
+            for (int i = 0; i < files.Count; i++)
+            {
+                if (files[i].relativePath == relativePath)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

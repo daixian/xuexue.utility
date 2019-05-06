@@ -27,6 +27,11 @@ namespace xuexue.utility.Incremental.DTO
         public string rootPath;
 
         /// <summary>
+        /// 下载这些文件的URL
+        /// </summary>
+        public string rootUrl;
+
+        /// <summary>
         /// 所有的文件项
         /// </summary>
         public List<Fileitem> files = new List<Fileitem>();

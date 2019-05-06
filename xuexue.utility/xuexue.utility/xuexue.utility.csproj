@@ -43,7 +43,7 @@
     <Compile Include="Data\RootDir.cs" />
     <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\MD5Helper.cs" />
-    <Compile Include="Helper\ExtensionMethod.cs" />
+    <Compile Include="Common\ExtensionMethod.cs" />
     <Compile Include="Incremental\DTO\DownloadFileItem.cs" />
     <Compile Include="Incremental\DTO\DownloadList.cs" />
     <Compile Include="Incremental\DTO\Fileitem.cs" />
@@ -61,14 +61,14 @@
     <Compile Include="LitJson\JsonWriter.cs" />
     <Compile Include="LitJson\Lexer.cs" />
     <Compile Include="LitJson\ParserToken.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="Common\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_StartDate="2000/1/1" BuildVersion_UseGlobalSettings="True" />
+      <UserProperties BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2000/1/1" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

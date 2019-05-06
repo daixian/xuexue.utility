@@ -18,7 +18,7 @@ namespace xuexue.utility.Incremental
         /// <summary>
         /// 创建一个配置文件
         /// </summary>
-        public static void CreateConfigFile(string dirPath, uint[] version, string saveFilePath)
+        public static void CreateSoftVersionFile(string dirPath, uint[] version, string rootUrl, string saveFilePath)
         {
 
             if (version == null || version.Length != 4)
@@ -37,7 +37,8 @@ namespace xuexue.utility.Incremental
             SoftFile softFile = new SoftFile
             {
                 version = version,
-                rootPath = di.FullName
+                rootPath = di.FullName,
+                rootUrl = rootUrl
             };
 
             FileInfo[] fis = di.GetFiles("*", SearchOption.AllDirectories);//无筛选的得到所有文件
@@ -69,25 +70,32 @@ namespace xuexue.utility.Incremental
         }
 
         /// <summary>
-        /// 新老版本两版软件之间的需要更新的文件列表
+        /// 新老版本两版软件之间的需要更新的文件列表,老软件信息可以为null
         /// </summary>
-        /// <param name="verOld"></param>
-        /// <param name="verNew"></param>
-        /// <param name="urlRoot"></param>
-        public static DownloadList CompareToDownloadList(SoftFile verOld, SoftFile verNew, string urlRoot)
+        /// <param name="verOld">老软件信息,可以为null</param>
+        /// <param name="verNew">新版软件信息,可以为null</param>
+        public static DownloadList CompareToDownloadList(SoftFile verOld, SoftFile verNew)
         {
             DownloadList downloadList = new DownloadList
             {
-                curVersion = verOld.version, //当前版本
                 targetVersion = verNew.version //目标版本
             };
+
+            if (verOld != null)
+            {
+                downloadList.curVersion = verOld.version;//当前版本
+            }
 
             //遍历所有新文件
             foreach (var item in verNew.files)
             {   //如果这一项在老文件里包含了,那么就不用下载
-                if (!verOld.IsContainFile(item))
+                if (verOld == null || !verOld.IsContainFile(item))
                 {
                     DownloadFileItem dfi = new DownloadFileItem(item);
+                    if (verNew.rootUrl.EndsWith("/"))
+                        dfi.url = verNew.rootUrl + dfi.relativePath;
+                    else
+                        dfi.url = verNew.rootUrl + "/" + dfi.relativePath;
                     downloadList.files.Add(dfi);
                 }
             }
