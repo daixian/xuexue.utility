@@ -22,7 +22,7 @@ namespace xuexue.utility.Incremental.DTO
         public uint[] version = new uint[4];
 
         /// <summary>
-        /// 文件夹的路径
+        /// 在电脑上的安装文件夹的路径
         /// </summary>
         public string rootPath;
 

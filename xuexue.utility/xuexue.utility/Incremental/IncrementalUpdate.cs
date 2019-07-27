@@ -14,15 +14,33 @@ namespace xuexue.utility.Incremental
     /// </summary>
     public class IncrementalUpdate
     {
-
-        /// <summary>
-        /// 计算一个软件版本文件
-        /// </summary>
-        /// <param name="rootPath">写进json的软件安装目录</param>
-        /// <param name="version"></param>
-        /// <param name="rootUrl"></param>
-        /// <param name="dirPath">要计算的文件夹</param>
-        /// <param name="saveJsonPath">要保存的json文件位置</param>
+        ///-------------------------------------------------------------------------------------------------
+        /// <summary> 计算一个软件版本文件. </summary>
+        ///
+        /// <remarks> 
+        ///    "version" : [1,0,0,0],
+        ///     "rootPath" : "C:\\Program Files\\MRSystem",
+        ///     "rootUrl"  : "http://mr.xuexuesoft.com:8010/soft/MRSystem/v1.0.0.0/",
+        ///     "files"    : [
+        ///    {
+        ///        "relativePath" : "CamHelper.dll",
+        ///        "fileSize"     : 88064,
+        ///        "SHA256"       : "9D8B396F753A9679ACDBC731535742C1B946A480330DD13B131B16C4E56DB3A7"
+        ///    },
+        ///    {
+        ///        "relativePath" : "Cjwdev.WindowsApi.dll",
+        ///        "fileSize"     : 56320,
+        ///        "SHA256"       : "212DAAF6E93D762F55DC900DF87BBB32FF191E6BEF1F57E185E04EEB2A671CC8"
+        ///    },
+        ///           
+        ///    Dx, 2019/6/27. </remarks>
+        ///
+        /// <param name="rootPath">     写进json的软件安装目录. </param>
+        /// <param name="version">      . </param>
+        /// <param name="rootUrl">      . </param>
+        /// <param name="dirPath">      要计算的文件夹. </param>
+        /// <param name="saveJsonPath"> 要保存的json文件位置. </param>
+        ///-------------------------------------------------------------------------------------------------
         public static void CreateSoftVersionFile(string rootPath, uint[] version, string rootUrl, string dirPath, string saveJsonPath)
         {
 
