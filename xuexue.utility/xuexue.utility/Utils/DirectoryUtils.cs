@@ -1,13 +1,19 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace xuexue.utility
 {
+    /// <summary>
+    /// 目录工具类。
+    /// </summary>
     public static class DirectoryUtils
     {
         #region 拷贝目录
 
+        /// <summary>
+        /// 目录同步模式。
+        /// </summary>
         public enum CopyMode
         {
             Mirror, // 完全一致：删除多余文件
@@ -73,7 +79,11 @@ namespace xuexue.utility
             }
         }
 
-        // BFS 计算文件总数
+        /// <summary>
+        /// 以 BFS 计算目录下所有文件数量。
+        /// </summary>
+        /// <param name="root">要扫描的目录根节点。</param>
+        /// <returns>文件总数。</returns>
         private static int CountFilesBFS(DirectoryInfo root)
         {
             int count = 0;
@@ -90,7 +100,11 @@ namespace xuexue.utility
             return count;
         }
 
-        // Mirror 模式下清理多余文件（同样 BFS 无递归）
+        /// <summary>
+        /// Mirror 模式下，按照源目录结构清理目标目录中多余的文件和目录。
+        /// </summary>
+        /// <param name="dstRoot">目标目录根节点。</param>
+        /// <param name="srcRoot">源目录根节点。</param>
         private static void CleanExtraBFS(DirectoryInfo dstRoot, DirectoryInfo srcRoot)
         {
             Queue<(DirectoryInfo src, DirectoryInfo dst)> q = new Queue<(DirectoryInfo src, DirectoryInfo dst)>();
@@ -121,13 +135,13 @@ namespace xuexue.utility
 
         #endregion
 
-
         #region 删除目录
 
         /// <summary>
         /// 一个文件一个文件安全删除，如果删除失败则输出日志然后跳过。
         /// BFS 遍历目录结构。
         /// </summary>
+        /// <param name="dir">要删除的目录，如果不存在则忽略。</param>
         public static void DeleteSafe(this DirectoryInfo dir)
         {
             if (dir == null || !dir.Exists)
