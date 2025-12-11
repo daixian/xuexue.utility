@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using xuexue.LitJson;
+
 
 namespace xuexue.utility.Incremental.DTO
 {
     /// <summary>
     /// 一个文件项
     /// </summary>
-    [xuexueJsonClass]
+
     public class Fileitem
     {
         /// <summary>
@@ -53,8 +53,7 @@ namespace xuexue.utility.Incremental.DTO
             //先比较大小,再比较SHA256
             if (o1.fileSize == o2.fileSize &&
                 o1.SHA256 == o2.SHA256 &&
-                o1.relativePath == o2.relativePath)
-            {
+                o1.relativePath == o2.relativePath) {
                 status = true;
             }
             return status;
@@ -65,8 +64,7 @@ namespace xuexue.utility.Incremental.DTO
         /// </summary>
         public static bool operator !=(Fileitem o1, Fileitem o2)
         {
-            if (o1 == o2)
-            {
+            if (o1 == o2) {
                 return false;
             }
             return true;

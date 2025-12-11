@@ -1,3 +1,0 @@
-[submodule "litjson"]
-	path = litjson
-	url = git@github.com:LitJSON/litjson.git

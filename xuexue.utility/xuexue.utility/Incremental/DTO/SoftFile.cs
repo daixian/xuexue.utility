@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using xuexue.LitJson;
 
 namespace xuexue.utility.Incremental.DTO
 {
     /// <summary>
     /// 一版软件
     /// </summary>
-    [xuexueJsonClass]
+
     public class SoftFile
     {
         /// <summary>

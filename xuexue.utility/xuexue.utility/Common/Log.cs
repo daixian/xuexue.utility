@@ -6,86 +6,35 @@ namespace xuexue.utility
     /// <summary>
     /// 这个模块的日志对外接口,添加对应log事件即可对外输出日志。
     /// </summary>
-    public static class Log
+    public static class Debug
     {
-        public static event Action<string> EventLogDebug = null;
+        public static event Action<string> LogDebugEvent;
+        public static event Action<string> LogInfoEvent;
+        public static event Action<string> LogWarningEvent;
+        public static event Action<string> LogErrorEvent;
 
-        public static event Action<string> EventLogInfo = null;
-
-        public static event Action<string> EventLogWarning = null;
-
-        public static event Action<string> EventLogError = null;
-
-        public static void Debug(string msg)
+        /// <summary>
+        /// 设置全部输出到控制台
+        /// </summary>
+        public static void SetConsoleLog()
         {
-            if (EventLogDebug != null)
-            {
-                EventLogDebug(msg);
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine(msg, "Debug");//如果没有绑定事件，那么就随便输出一下到控制台算了
-            }
+            Debug.LogInfoEvent += (msg) => Console.WriteLine(msg);
+            Debug.LogWarningEvent += (msg) => Console.WriteLine(msg);
+            Debug.LogErrorEvent += (msg) => Console.WriteLine(msg);
+            Debug.LogDebugEvent += (msg) => Console.WriteLine(msg);
         }
 
-        public static void Info(string msg)
+        public static void Cleanup()
         {
-            if (EventLogInfo != null)
-            {
-                EventLogInfo(msg);
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine(msg, "Info");//如果没有绑定事件，那么就随便输出一下到控制台算了
-            }
+            Debug.LogInfoEvent = null;
+            Debug.LogWarningEvent = null;
+            Debug.LogErrorEvent = null;
+            Debug.LogDebugEvent = null;
         }
 
-        public static void Warning(string msg)
-        {
-            if (EventLogWarning != null)
-            {
-                EventLogWarning(msg);
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine(msg, "Warning");//如果没有绑定事件，那么就随便输出一下到控制台算了
-                System.Diagnostics.Debug.Write($"StackTrace:");
-                StackTrace st = new StackTrace(true);
-                StackFrame[] sfs = st.GetFrames();
-                int showLineNum = 6 < sfs.Length ? 6 : sfs.Length;
-                for (int i = 1; i < showLineNum; i++)//因为最上一行就是这个函数，所以从i=1开始
-                {
-                    if (string.IsNullOrEmpty(sfs[i].GetFileName()))
-                        System.Diagnostics.Debug.WriteLine($"{sfs[i].GetMethod()}");
-                    else
-                        System.Diagnostics.Debug.WriteLine($"{sfs[i].GetFileName()}.{sfs[i].GetMethod()}:line{sfs[i].GetFileLineNumber()}");
-
-                }
-            }
-        }
-
-        public static void Error(string msg)
-        {
-            if (EventLogError != null)
-            {
-                EventLogError(msg);
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine(msg, "Error");//如果没有绑定事件，那么就随便输出一下到控制台算了
-                System.Diagnostics.Debug.Write($"StackTrace:");
-                StackTrace st = new StackTrace(true);
-                StackFrame[] sfs = st.GetFrames();
-                int showLineNum = 6 < sfs.Length ? 6 : sfs.Length;
-                for (int i = 1; i < showLineNum; i++)//因为最上一行就是这个函数，所以从i=1开始
-                {
-                    if (string.IsNullOrEmpty(sfs[i].GetFileName()))
-                        System.Diagnostics.Debug.WriteLine($"{sfs[i].GetMethod()}");
-                    else
-                        System.Diagnostics.Debug.WriteLine($"{sfs[i].GetFileName()}.{sfs[i].GetMethod()}:line{sfs[i].GetFileLineNumber()}");
-
-                }
-            }
-        }
+        public static void LogDebug(string msg) => LogDebugEvent?.Invoke(msg);
+        public static void Log(string msg) => LogInfoEvent?.Invoke(msg);
+        public static void LogWarning(string msg) => LogWarningEvent?.Invoke(msg);
+        public static void LogError(string msg) => LogErrorEvent?.Invoke(msg);
     }
 }
